@@ -56,17 +56,19 @@ Really think about what the question is asking you to do. Don't be restrained by
 ## Questions
 
 ### Question 1: clickCounterHandler - modify.js
-As you can see in our HTML, we have a button `#click-button` with a `data-clicks` attribute. Each time you click on the button, the `data-clicks` attribute should be incremented, and the button text should show the number of times it has been clicked.
+As you can see in our `modify.html`, we have a `button#click-button` element with a `data-clicks` attribute (line 14). 
+
+The functionality we want is that each time you click on the button, the `data-clicks` attribute should be incremented, and the button text should show the number of times it has been clicked.
 
 1. Inside the `main` function, register a `click` event listener for the `#click-button` button that uses the function `clickCounterHandler`.
 2. Inside of `clickCounterHandler`, it should...
-    - increment the value of the `data-clicks` attribute on the clicked button (how can you get the element that was clicked?)
+    - increment the value of the `data-clicks` attribute on the clicked button (how can you get the element that was clicked without using `document.querySelector` again?)
     - update the text of the clicked button to tell us how many times it's been clicked (check out the tests to see exactly what we want the button to say)
 
 <details><summary>Hints!</summary>
   
 > **Notes about `data-` attributes**:
-> 1. Remember that `data-` attributes come from the HTML as strings so you may need to convert the string to a number before incrementing!
+> 1. Remember that the value of a `data-` attribute will be a string so you may need to convert the string to a number before incrementing!
 > 2. `data-` attributes can be accessed from a selected element using the `.dataset` property
 > 3. `data-` attribute names are converted to camelCase. For example, the `data-my-name` attribute would be converted to `.dataset.myName` on the element.
 > 
@@ -75,8 +77,8 @@ As you can see in our HTML, we have a button `#click-button` with a `data-clicks
 > 
 > ```js
 > const printTheTarget = (event) => {
+>   // ▼ this is much better than querying for the clicked element
 >   console.log(event.target);
->   // ▲ this is much better than querying for the clicked element
 >
 >   // ▼ this is the same value as event.target but with much more code
 >   const target = document.querySelector("#thingy");
@@ -94,22 +96,28 @@ As you can see in our HTML, we have a button `#click-button` with a `data-clicks
 Anytime the user presses a key on their keyboard, we want to tell them the key they pressed. 
 
 Do the following:
-* Add a `"keydown"` event listener to the `body` that triggers the `handleKeydown` function to be invoked.
+* In the `main` function, add a `"keydown"` event listener to the `document.body` that triggers the `handleKeydown` function to be invoked.
 * The `handleKeydown` function should:
-   *  select the `p` tag with an id of `keydown-tracker`
-   *  modify the `textContent` of that `p` tag to display the name of the key that was pressed.
+   *  select the `p#keydown-tracker` element
+   *  modify the `textContent` of that element to display the name of the key that was pressed.
 
 Check the tests to see *exactly* what the text content of the tag should be. Investigate the `event` object to see where you can grab the needed information.
 
 ### Question 3: remove the inline event listener - modify.js
-You many have noticed there's another button with a `data-clicks` attribute. However, it's using an inline `onclick` function to do this. Keeping the functionality the same as question 1, **edit just this section of the html** to remove the click handler, and in your JS replace it with an event listener using the handler we built in question 1. Check the tests to see exactly what we're looking for.
+You many have noticed there's another button with a `data-clicks` attribute. However, it's using an inline `onclick` function to do this. You need to replace that inline event handler with one assigned using JavaScript.
+
+* In `modify.html`, **edit just this section of the html** to remove the click handler. 
+* In the `main` function of `modify.js`, add an event listener to the `button#inline-example` element using the `clickCounterHandler` from question 1. 
+* Check the tests to see exactly what we're looking for.
 
 ### Question 4: handleDelegation - modify.js
-In the JS code, you'll see there's already the start of some delegation handling. The idea here is that whenever you click a button in the container, the `#delegation-result` span will update with the text of that button (look at the `modify.html` file to see what we're talking about).
+In `modify.html`, we have a `div#delegation` element that contains a bunch of buttons, followed by a `p` with a `span#delegation-result` element.
 
-However, if you click the `div` container, the result will also update. We don't want that of course, it looks weird. So update `handleDelegation` to only update the span's text content if a *button* is clicked.
+The idea here is that whenever you click a `button` in the `div#delegation` container, the `span#delegation-result` element will update with the text of that button.
 
-> Do not cheat and just add click event listeners to each button. We'll completely remake the buttons in the tests. You have to add the listener to the delegation container! (This ability to remove and remake children without causing event issues is actually one of the best features of delegation. Remember that for your own projects...)
+In the JS code, you'll see there's already the start of some delegation handling. However, if you click in the empty space around the buttons in the the `div#delegation` container, the span will update, not just when you click the buttons. We only want it to update when a button is clicked. So, update `handleDelegation` to only update the span's text content if a *button* is clicked.
+
+> Do not just add click event listeners to each button.You have to add the listener to the delegation container! (This ability to remove and remake children without causing event issues is actually one of the best features of delegation. Remember that for your own projects...)
 
 <details><summary>Hint</summary>
 
@@ -120,10 +128,16 @@ However, if you click the `div` container, the result will also update. We don't
 </details>
 
 ### Question 5: addNewRandomNumber - modify.js
-This is a fun one. Add a click event listener to the `#add-random-num` button that creates a new `li` with *only* a random number greater than 0 in it. The `li`s should go in the `#random-numbers` `ul`. All of this logic should live in the `addNewRandomNumber` function.
+This is a fun one. 
+
+* In the `main` function, add a `"click"` event listener to the `#add-random-num` button for the `addNewRandomNumber` handler
+* In the handler, create a new `li` whose `textContent` is a random number greater than `0` (the range of the random numbers doesn't matter, just make it random and greater than `0`). 
+* Append the new `li` to the `ul#random-numbers` element.
 
 ### Question 6: removing an event listener  - modify.js
-Lastly, you should know how to remove listeners. There's a button with an id of `#remove`. Attach a click event listener to this button that will remove the delegation click event listener from the `#delegation` container.
+Lastly, it is important to know how to remove listeners. 
+
+There's a `button#remove` element. Attach a click event listener to this button that will remove the `handleDelegation` event handler from the `#delegation` container.
 
 ### Question 7: Do it all from scratch - index.js
 Ok, you got it with some help, now can you do it on your own? We have a blank `index.html` and blank `index.js`. Your job is to:
@@ -135,7 +149,7 @@ Ok, you got it with some help, now can you do it on your own? We have a blank `i
   - A `p` tag with an id of `results` and text content of `0` to start
 - Link the `index.js` script to this page
 - Add a click event listener to the button that increments the `results` counter by `1` with each click
-  - Do not add an onclick function, use a listener
+  - Do not add an inline `onclick` function, use `addEventListener`.
 
 Check the tests to make sure you're doing what we're asking for!
 
