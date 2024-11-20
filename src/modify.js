@@ -1,4 +1,4 @@
-// Handles button clicks to increment the data-clicks attribute
+// Note: it is common to shorten the `event` parameter name to `e`
 const clickCounterHandler = (e) => {
   // Use event.target to access the clicked element directly
   const button = e.target;
@@ -22,9 +22,8 @@ const clickCounterHandler = (e) => {
 const handleKeydown = (e) => {
   const keyDown = document.querySelector("#keydown-tracker");
 
-  // Display the key name using the event.code property
+  // Display the key name using the event.code property which is slightly different than the event.key property
   keyDown.textContent = `You pressed ${e.code}`;
-
 };
 
 // Handles event delegation for a container
@@ -32,7 +31,7 @@ const handleDelegation = (event) => {
   const resultSpan = document.querySelector("#delegation-result");
 
   // Check if the target is a button
-  if (event.target.tagName === "BUTTON") {
+  if (event.target.matches("button")) {
     resultSpan.textContent = event.target.textContent;
   }
 
@@ -80,6 +79,5 @@ const main = () => {
 
   // Best Practice: Centralize all event listener assignments for better organization.
 };
-
 
 main();
